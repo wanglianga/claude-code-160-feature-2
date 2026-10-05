@@ -78,7 +78,13 @@ public class MachineController {
                             + (affected.isEmpty() ? "" : "。今日受影响患者：" + affectedNames + "，请安排调班"),
                     current.name());
         }
-        return Map.of("machine", machine, "affectedSessions", affected);
+        Map<String, Object> result = new java.util.LinkedHashMap<>();
+        result.put("machine", machine);
+        result.put("affectedSessions", affected);
+        if (request.status() == MachineStatus.FAULT) {
+            result.put("rescheduleTip", "可前往「故障改排」页创建改排方案，统一决策受影响患者并联动通知、耗材与消毒");
+        }
+        return result;
     }
 
     private DialysisMachine get(Long id) {

@@ -27,6 +27,7 @@ public class StatsService {
     private final ConsumableTxnRepository txnRepo;
     private final ConsumableRepository consumableRepo;
     private final DisinfectionRecordRepository disinfectionRepo;
+    private final ReschedulePlanRepository reschedulePlanRepo;
 
     /** 今日工作台总览 */
     public Map<String, Object> dashboard() {
@@ -66,6 +67,10 @@ public class StatsService {
                     return m;
                 }).toList();
         result.put("lowStock", lowStock);
+
+        // 进行中的机位故障改排方案
+        result.put("openReschedulePlans",
+                reschedulePlanRepo.countByStatus(com.hd.center.entity.Enums.ReschedulePlanStatus.OPEN));
         return result;
     }
 

@@ -74,13 +74,19 @@ public class ConsumableService {
     /** 为一条治疗单预领标准套件 */
     @Transactional
     public List<ConsumableTxn> preDrawForSession(DialysisSession session, String operator) {
+        return preDrawForSession(session, operator, "治疗单#" + session.getId() + " 标准套件预领");
+    }
+
+    /** 为一条治疗单预领标准套件（自定义流水备注，如故障改排后重新预领） */
+    @Transactional
+    public List<ConsumableTxn> preDrawForSession(DialysisSession session, String operator, String note) {
         List<ConsumableTxn> result = new ArrayList<>();
         List<Consumable> all = consumableRepo.findAllByOrderByCode();
         for (Map.Entry<String, Integer> entry : STANDARD_KIT.entrySet()) {
             Consumable c = all.stream().filter(x -> x.getCode().equals(entry.getKey())).findFirst().orElse(null);
             if (c == null) continue;
             result.add(transact(c, TxnType.PRE_DRAW, entry.getValue(), session.getId(),
-                    session.getPatient().getName(), operator, "治疗单#" + session.getId() + " 标准套件预领"));
+                    session.getPatient().getName(), operator, note));
         }
         return result;
     }

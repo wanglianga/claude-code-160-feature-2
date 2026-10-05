@@ -57,4 +57,16 @@ public final class Enums {
 
     /** 收费核对状态 */
     public enum BillingStatus { PENDING, CONFIRMED }
+
+    /** 故障改排动作类型：延后 / 换机 / 改到下午班 / 协商调换 */
+    public enum RescheduleActionType { DELAY, CHANGE_MACHINE, SHIFT_PM, SWAP }
+
+    /** 故障改排方案状态 */
+    public enum ReschedulePlanStatus { OPEN, DONE, CANCELLED }
+
+    /** 改排动作处理状态 */
+    public enum RescheduleActionStatus { PENDING, DONE }
+
+    /** 患者通知状态 */
+    public enum NotifyStatus { PENDING, DONE }
 }

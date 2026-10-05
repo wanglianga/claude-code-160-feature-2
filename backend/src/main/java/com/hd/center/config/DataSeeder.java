@@ -6,6 +6,7 @@ import com.hd.center.repository.*;
 import com.hd.center.service.BillingService;
 import com.hd.center.service.ConsumableService;
 import com.hd.center.service.ExceptionService;
+import com.hd.center.service.RescheduleService;
 import com.hd.center.service.SchedulingService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,6 +19,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 首次启动时初始化演示数据：账号、机位、患者、耗材、今日排班与一条完整治疗流水。
@@ -42,6 +44,7 @@ public class DataSeeder implements CommandLineRunner {
     private final BillingService billingService;
     private final ExceptionService exceptionService;
     private final ConsumableService consumableService;
+    private final RescheduleService rescheduleService;
 
     @Override
     @Transactional
@@ -56,6 +59,7 @@ public class DataSeeder implements CommandLineRunner {
         seedConsumables();
         seedDisinfectionHistory();
         seedTodaySessions();
+        seedRescheduleDemo();
         log.info("演示数据初始化完成");
     }
 
@@ -320,6 +324,46 @@ public class DataSeeder implements CommandLineRunner {
                     exceptionService.raise(ExceptionType.MACHINE_FAULT, null, null, m,
                             "机位 M08 电导度漂移，停机维护", "赵工");
                 });
+    }
+
+    /**
+     * 机位故障改排演示：一台上午班机位自检失败，生成改排方案；
+     * 上午班患者演示「延后 + 已通知 + 到院补偿登记」的完整闭环，下午班患者留待护士长决策。
+     */
+    @SuppressWarnings("unchecked")
+    private void seedRescheduleDemo() {
+        LocalDate today = LocalDate.now();
+        // 找一条上午班、未上机、机位空闲的治疗单，其机位作为故障机位
+        DialysisSession targetSession = sessionRepo.findBySessionDateOrderByShiftAscSeqNoAsc(today).stream()
+                .filter(s -> s.getShift() == Shift.AM)
+                .filter(s -> s.getStatus() == SessionStatus.ASSESSED || s.getStatus() == SessionStatus.SCHEDULED)
+                .filter(s -> s.getMachine().getStatus() == MachineStatus.IDLE)
+                .findFirst().orElse(null);
+        if (targetSession == null) {
+            return;
+        }
+        LocalDateTime repairAt = targetSession.getPlannedStart().plusMinutes(60);
+        Map<String, Object> planView = rescheduleService.createPlan(
+                targetSession.getMachine().getId(), today,
+                "班前自检失败：电导度异常，待工程检修", repairAt, "系统初始化");
+
+        List<Map<String, Object>> actions = (List<Map<String, Object>>) planView.get("actions");
+        RescheduleAction amAction = actions.stream()
+                .map(v -> (RescheduleAction) v.get("action"))
+                .filter(a -> a.getSession().getShift() == Shift.AM)
+                .findFirst().orElse(null);
+        if (amAction == null) {
+            return;
+        }
+        // 延后 90 分钟（晚于预计修复时间），随后登记通知与到院补偿
+        LocalDateTime delayedStart = targetSession.getPlannedStart().plusMinutes(90);
+        rescheduleService.decide(amAction.getId(), RescheduleActionType.DELAY, null, 90,
+                "等工程修复后上机", "系统初始化");
+        rescheduleService.notify(amAction.getId(), "电话",
+                "已告知患者延后至 " + delayedStart.toLocalTime() + " 上机",
+                "家属 12:30 来院接回", "系统初始化");
+        rescheduleService.arrival(amAction.getId(),
+                "等候补偿：早餐券×1 + 交通补贴 20 元", "班车返程由 11:40 改至 13:30", "系统初始化");
     }
 
     private void startSession(DialysisSession s, int minutesAgo) {

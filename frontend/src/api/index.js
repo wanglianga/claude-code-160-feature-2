@@ -71,6 +71,17 @@ export default {
   exceptions: (status) => http.get('/exceptions', { params: { status } }),
   createException: (data) => http.post('/exceptions', data),
   handleException: (id, status, handleNote) => http.put(`/exceptions/${id}/handle`, { status, handleNote }),
+  // 机位故障改排
+  reschedulePlans: (params) => http.get('/reschedule/plans', { params }),
+  createReschedulePlan: (data) => http.post('/reschedule/plans', data),
+  rescheduleDetail: (id) => http.get(`/reschedule/plans/${id}`),
+  updateRepairTime: (id, expectedRepairAt) => http.post(`/reschedule/plans/${id}/repair-time`, { expectedRepairAt }),
+  closeReschedulePlan: (id) => http.post(`/reschedule/plans/${id}/close`),
+  decideReschedule: (actionId, data) => http.post(`/reschedule/actions/${actionId}/decide`, data),
+  swapReschedule: (actionId, data) => http.post(`/reschedule/actions/${actionId}/swap`, data),
+  swapCandidates: (actionId) => http.get(`/reschedule/actions/${actionId}/swap-candidates`),
+  notifyReschedule: (actionId, data) => http.post(`/reschedule/actions/${actionId}/notify`, data),
+  arrivalReschedule: (actionId, data) => http.post(`/reschedule/actions/${actionId}/arrival`, data),
   // 收费
   billings: (status) => http.get('/billing', { params: { status } }),
   updateBilling: (id, data) => http.put(`/billing/${id}`, data),

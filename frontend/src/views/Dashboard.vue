@@ -1,5 +1,12 @@
 <template>
   <div v-loading="loading">
+    <el-alert v-if="data.openReschedulePlans > 0" type="error" :closable="false" style="margin-bottom:16px">
+      <template #title>
+        有 {{ data.openReschedulePlans }} 个机位故障改排方案进行中，受影响患者待处置
+        <el-button size="small" type="danger" plain style="margin-left:12px"
+                   @click="$router.push('/reschedule')">前往故障改排</el-button>
+      </template>
+    </el-alert>
     <el-row :gutter="16">
       <el-col :span="6">
         <el-card shadow="hover" class="stat-card">

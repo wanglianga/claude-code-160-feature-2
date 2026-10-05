@@ -61,6 +61,15 @@ public class MetaController {
                 {"OPEN", "待处理"}, {"PROCESSING", "处理中"}, {"RESOLVED", "已解决"}}));
         map.put("BillingStatus", list(new String[][]{
                 {"PENDING", "待核对"}, {"CONFIRMED", "已核对"}}));
+        map.put("RescheduleActionType", list(new String[][]{
+                {"DELAY", "延后上机"}, {"CHANGE_MACHINE", "更换机位"},
+                {"SHIFT_PM", "改到下午班"}, {"SWAP", "协商调换"}}));
+        map.put("ReschedulePlanStatus", list(new String[][]{
+                {"OPEN", "改排中"}, {"DONE", "已闭环"}, {"CANCELLED", "已取消"}}));
+        map.put("RescheduleActionStatus", list(new String[][]{
+                {"PENDING", "待决策"}, {"DONE", "已改排"}}));
+        map.put("NotifyStatus", list(new String[][]{
+                {"PENDING", "待通知"}, {"DONE", "已通知"}}));
         return map;
     }
 

@@ -22,7 +22,11 @@ export const LABELS = {
     CONSUMABLE_SHORTAGE: '耗材不足', HYPOTENSION: '透析中低血压', ORDER_CHANGE: '医嘱调整', OTHER: '其他'
   },
   ExceptionStatus: { OPEN: '待处理', PROCESSING: '处理中', RESOLVED: '已解决' },
-  BillingStatus: { PENDING: '待核对', CONFIRMED: '已核对' }
+  BillingStatus: { PENDING: '待核对', CONFIRMED: '已核对' },
+  RescheduleActionType: { DELAY: '延后上机', CHANGE_MACHINE: '更换机位', SHIFT_PM: '改到下午班', SWAP: '协商调换' },
+  ReschedulePlanStatus: { OPEN: '改排中', DONE: '已闭环', CANCELLED: '已取消' },
+  RescheduleActionStatus: { PENDING: '待决策', DONE: '已改排' },
+  NotifyStatus: { PENDING: '待通知', DONE: '已通知' }
 }
 
 export const TAG_TYPES = {
@@ -35,7 +39,10 @@ export const TAG_TYPES = {
   BillingStatus: { PENDING: 'warning', CONFIRMED: 'success' },
   RiskLevel: { LOW: 'success', MEDIUM: 'warning', HIGH: 'danger' },
   InfectionMarker: { NONE: 'success', HBV: 'warning', HCV: 'warning', TP: 'danger', OTHER: 'danger' },
-  DisinfectionResult: { PASS: 'success', FAIL: 'danger' }
+  DisinfectionResult: { PASS: 'success', FAIL: 'danger' },
+  ReschedulePlanStatus: { OPEN: 'warning', DONE: 'success', CANCELLED: 'info' },
+  RescheduleActionStatus: { PENDING: 'danger', DONE: 'success' },
+  NotifyStatus: { PENDING: 'danger', DONE: 'success' }
 }
 
 export function label(group, value) {
