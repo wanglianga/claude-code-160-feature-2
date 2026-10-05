@@ -51,6 +51,12 @@ export default {
   moveSession: (id, machineId, date, shift) => http.post(`/sessions/${id}/move`, { machineId, date, shift }),
   late: (id, note) => http.post(`/sessions/${id}/late`, { note }),
   leave: (id, reason) => http.post(`/sessions/${id}/leave`, { reason }),
+  // 机位故障改排
+  rescheduleOptions: (machineId, date) => http.get('/reschedule/options', { params: { machineId, date } }),
+  rescheduleApply: (data) => http.post('/reschedule/apply', data),
+  rescheduleRecords: (date) => http.get('/reschedule/records', { params: { date } }),
+  rescheduleChain: (id) => http.get(`/reschedule/${id}/chain`),
+  swapCandidates: (sessionId) => http.get('/reschedule/swap-candidates', { params: { sessionId } }),
   startSession: (id) => http.post(`/sessions/${id}/start`),
   sessionDetail: (id) => http.get(`/sessions/${id}/detail`),
   // 治疗过程

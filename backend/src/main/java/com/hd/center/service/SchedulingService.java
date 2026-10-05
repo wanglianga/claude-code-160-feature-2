@@ -114,7 +114,7 @@ public class SchedulingService {
     }
 
     /** 机器当日下一个可用上机时刻：班次开始 与 上一台治疗结束+消毒间隔 取较晚者 */
-    private LocalDateTime nextSlot(DialysisMachine machine, LocalDate date, Shift shift, List<DialysisSession> pending) {
+    public LocalDateTime nextSlot(DialysisMachine machine, LocalDate date, Shift shift, List<DialysisSession> pending) {
         LocalDateTime slot = shiftStart(date, shift);
         List<DialysisSession> daySessions = new ArrayList<>(
                 sessionRepo.findBySessionDateAndMachineIdAndStatusNotIn(date, machine.getId(), INACTIVE));
@@ -129,7 +129,7 @@ public class SchedulingService {
         return slot;
     }
 
-    private int nextSeqNo(Long machineId, LocalDate date, Shift shift, List<DialysisSession> pending) {
+    public int nextSeqNo(Long machineId, LocalDate date, Shift shift, List<DialysisSession> pending) {
         int existing = sessionRepo.findBySessionDateAndShiftAndMachineId(date, shift, machineId).stream()
                 .filter(s -> !INACTIVE.contains(s.getStatus()))
                 .mapToInt(s -> s.getSeqNo() == null ? 0 : s.getSeqNo()).max().orElse(0);

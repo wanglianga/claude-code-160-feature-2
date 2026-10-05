@@ -22,7 +22,9 @@ export const LABELS = {
     CONSUMABLE_SHORTAGE: '耗材不足', HYPOTENSION: '透析中低血压', ORDER_CHANGE: '医嘱调整', OTHER: '其他'
   },
   ExceptionStatus: { OPEN: '待处理', PROCESSING: '处理中', RESOLVED: '已解决' },
-  BillingStatus: { PENDING: '待核对', CONFIRMED: '已核对' }
+  BillingStatus: { PENDING: '待核对', CONFIRMED: '已核对' },
+  RescheduleAction: { DELAY: '延后', SWITCH_MACHINE: '换机', SHIFT_CHANGE: '改班次', SWAP: '协商调换' },
+  NotifyChannel: { PHONE: '电话通知', SMS: '短信通知', IN_PERSON: '现场告知', FAMILY_PHONE: '通知家属' }
 }
 
 export const TAG_TYPES = {
@@ -35,7 +37,8 @@ export const TAG_TYPES = {
   BillingStatus: { PENDING: 'warning', CONFIRMED: 'success' },
   RiskLevel: { LOW: 'success', MEDIUM: 'warning', HIGH: 'danger' },
   InfectionMarker: { NONE: 'success', HBV: 'warning', HCV: 'warning', TP: 'danger', OTHER: 'danger' },
-  DisinfectionResult: { PASS: 'success', FAIL: 'danger' }
+  DisinfectionResult: { PASS: 'success', FAIL: 'danger' },
+  RescheduleAction: { DELAY: 'warning', SWITCH_MACHINE: 'primary', SHIFT_CHANGE: 'success', SWAP: 'danger' }
 }
 
 export function label(group, value) {

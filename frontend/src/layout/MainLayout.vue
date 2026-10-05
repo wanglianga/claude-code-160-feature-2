@@ -48,6 +48,7 @@ const router = useRouter()
 const ALL_MENUS = [
   { path: '/dashboard', title: '工作台', icon: 'Monitor', roles: null },
   { path: '/schedule', title: '排班看板', icon: 'Calendar', roles: null },
+  { path: '/reschedule', title: '故障改排', icon: 'Switch', roles: ['ADMIN', 'NURSE'] },
   { path: '/patients', title: '患者管理', icon: 'User', roles: ['ADMIN', 'NURSE', 'DOCTOR'] },
   { path: '/treatment', title: '透析治疗', icon: 'FirstAidKit', roles: ['ADMIN', 'NURSE', 'DOCTOR'] },
   { path: '/machines', title: '机器与消毒', icon: 'SetUp', roles: ['ADMIN', 'NURSE', 'ENGINEER'] },

@@ -9,6 +9,7 @@ const routes = [
     children: [
       { path: 'dashboard', name: 'dashboard', component: () => import('../views/Dashboard.vue'), meta: { title: '工作台' } },
       { path: 'schedule', name: 'schedule', component: () => import('../views/ScheduleView.vue'), meta: { title: '排班看板' } },
+      { path: 'reschedule', name: 'reschedule', component: () => import('../views/RescheduleView.vue'), meta: { title: '故障改排', roles: ['ADMIN', 'NURSE'] } },
       { path: 'patients', name: 'patients', component: () => import('../views/PatientsView.vue'), meta: { title: '患者管理', roles: ['ADMIN', 'NURSE', 'DOCTOR'] } },
       { path: 'treatment', name: 'treatment', component: () => import('../views/TreatmentView.vue'), meta: { title: '透析治疗', roles: ['ADMIN', 'NURSE', 'DOCTOR'] } },
       { path: 'machines', name: 'machines', component: () => import('../views/MachinesView.vue'), meta: { title: '机器与消毒', roles: ['ADMIN', 'NURSE', 'ENGINEER'] } },

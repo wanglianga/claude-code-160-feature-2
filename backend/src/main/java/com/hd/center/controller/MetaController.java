@@ -61,6 +61,12 @@ public class MetaController {
                 {"OPEN", "待处理"}, {"PROCESSING", "处理中"}, {"RESOLVED", "已解决"}}));
         map.put("BillingStatus", list(new String[][]{
                 {"PENDING", "待核对"}, {"CONFIRMED", "已核对"}}));
+        map.put("RescheduleAction", list(new String[][]{
+                {"DELAY", "延后"}, {"SWITCH_MACHINE", "换机"},
+                {"SHIFT_CHANGE", "改班次"}, {"SWAP", "协商调换"}}));
+        map.put("NotifyChannel", list(new String[][]{
+                {"PHONE", "电话通知"}, {"SMS", "短信通知"},
+                {"IN_PERSON", "现场告知"}, {"FAMILY_PHONE", "通知家属"}}));
         return map;
     }
 

@@ -57,4 +57,10 @@ public final class Enums {
 
     /** 收费核对状态 */
     public enum BillingStatus { PENDING, CONFIRMED }
+
+    /** 机位故障改排方式 */
+    public enum RescheduleAction { DELAY, SWITCH_MACHINE, SHIFT_CHANGE, SWAP }
+
+    /** 患者通知方式 */
+    public enum NotifyChannel { PHONE, SMS, IN_PERSON, FAMILY_PHONE }
 }

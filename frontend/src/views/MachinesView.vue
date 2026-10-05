@@ -132,10 +132,13 @@
 
 <script setup>
 import { onMounted, reactive, ref } from 'vue'
+import { useRouter } from 'vue-router'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { Plus } from '@element-plus/icons-vue'
 import api from '../api'
 import { label, tagType, options, fmtTime } from '../utils/labels'
+
+const router = useRouter()
 
 const machines = ref([])
 const records = ref([])
@@ -205,10 +208,13 @@ async function changeStatus(row, status) {
   }
   const res = await api.changeMachineStatus(row.id, status, note)
   if (res.affectedSessions?.length) {
-    ElMessageBox.alert(
-      `今日受影响患者：${res.affectedSessions.map(s => s.patient.name).join('、')}，已到排班看板调班`,
-      '已上报机器故障异常', { type: 'warning' }
-    )
+    ElMessageBox.confirm(
+      `今日受影响患者：${res.affectedSessions.map(s => s.patient.name).join('、')}。已上报机器故障异常，可立即筛查备用机位并改排。`,
+      '存在受影响患者',
+      { type: 'warning', confirmButtonText: '前往故障改排', cancelButtonText: '留在此页' }
+    ).then(() => {
+      router.push({ path: '/reschedule', query: { machineId: row.id } })
+    }).catch(() => {})
   } else {
     ElMessage.success('状态已更新')
   }
